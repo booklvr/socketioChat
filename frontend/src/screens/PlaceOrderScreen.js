@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect } from 'react'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
@@ -11,7 +11,12 @@ const PlaceOrderScreen = ({ history }) => {
 
   const cart = useSelector((state) => state.cart)
 
-  // calculate prices
+  if (!cart.shippingAddress.address) {
+    history.push('/shipping')
+  } else if (!cart.paymentMethod) {
+    history.push('/payment')
+  }
+  //   Calculate prices
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2)
   }
@@ -31,15 +36,14 @@ const PlaceOrderScreen = ({ history }) => {
   const { order, success, error } = orderCreate
 
   useEffect(() => {
+    console.log('place order screen order use effect:', order)
     if (success) {
       history.push(`/order/${order._id}`)
     }
     // eslint-disable-next-line
   }, [history, success])
 
-  const placeOrderHandler = (e) => {
-    e.preventDefault()
-
+  const placeOrderHandler = () => {
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
@@ -54,7 +58,7 @@ const PlaceOrderScreen = ({ history }) => {
   }
 
   return (
-    <Fragment>
+    <>
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
@@ -62,7 +66,7 @@ const PlaceOrderScreen = ({ history }) => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Address: </strong>
+                <strong>Address:</strong>
                 {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
                 {cart.shippingAddress.postalCode},{' '}
                 {cart.shippingAddress.country}
@@ -90,10 +94,12 @@ const PlaceOrderScreen = ({ history }) => {
                             alt={item.name}
                             fluid
                             rounded
-                          ></Image>
+                          />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}></Link>
+                          <Link to={`/product/${item.product}`}>
+                            {item.name}
+                          </Link>
                         </Col>
                         <Col md={4}>
                           {item.qty} x ${item.price} = ${item.qty * item.price}
@@ -143,7 +149,7 @@ const PlaceOrderScreen = ({ history }) => {
                 <Button
                   type='button'
                   className='btn-block'
-                  disabled={cart.cartItems.length === 0}
+                  disabled={cart.cartItems === 0}
                   onClick={placeOrderHandler}
                 >
                   Place Order
@@ -153,7 +159,7 @@ const PlaceOrderScreen = ({ history }) => {
           </Card>
         </Col>
       </Row>
-    </Fragment>
+    </>
   )
 }
 

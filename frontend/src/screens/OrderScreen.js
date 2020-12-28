@@ -1,15 +1,15 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getOrderDetails, payOrder } from '../actions/orderActions'
 import { ORDER_PAY_RESET } from '../constants/orderConstants'
 
-const OrderScreen = ({ match, history }) => {
+const OrderScreen = ({ match }) => {
   const orderId = match.params.id
 
   const [sdkReady, setSdkReady] = useState(false)
@@ -19,13 +19,13 @@ const OrderScreen = ({ match, history }) => {
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
 
-  console.log('order', order)
+  console.log(order)
 
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, success: successPay } = orderPay
 
   if (!loading) {
-    // calculate prices
+    //   Calculate prices
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2)
     }
@@ -36,10 +36,6 @@ const OrderScreen = ({ match, history }) => {
   }
 
   useEffect(() => {
-    // if (!userInfo) {
-    //   history.push('/login')
-    // }
-
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal')
       const script = document.createElement('script')
@@ -52,7 +48,8 @@ const OrderScreen = ({ match, history }) => {
       document.body.appendChild(script)
     }
 
-    if (!order || successPay || order._id !== orderId) {
+    if (!order || successPay) {
+      console.log('orderId:', orderId);
       dispatch({ type: ORDER_PAY_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
@@ -74,7 +71,7 @@ const OrderScreen = ({ match, history }) => {
   ) : error ? (
     <Message variant='danger'>{error}</Message>
   ) : (
-    <Fragment>
+    <>
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
@@ -188,7 +185,7 @@ const OrderScreen = ({ match, history }) => {
                     <PayPalButton
                       amount={order.totalPrice}
                       onSuccess={successPaymentHandler}
-                    ></PayPalButton>
+                    />
                   )}
                 </ListGroup.Item>
               )}
@@ -196,7 +193,7 @@ const OrderScreen = ({ match, history }) => {
           </Card>
         </Col>
       </Row>
-    </Fragment>
+    </>
   )
 }
 

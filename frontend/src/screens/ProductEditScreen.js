@@ -37,7 +37,7 @@ const ProductEditScreen = ({ match, history }) => {
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET })
-      history.push('/admin/productList')
+      history.push('/admin/productlist')
     } else {
       if (!product.name || product._id !== productId) {
         dispatch(listProductDetails(productId))
@@ -94,7 +94,7 @@ const ProductEditScreen = ({ match, history }) => {
   }
 
   return (
-    <Fragment>
+    <>
       <Link to='/admin/productlist' className='btn btn-light my-3'>
         Go Back
       </Link>
@@ -191,7 +191,7 @@ const ProductEditScreen = ({ match, history }) => {
           </Form>
         )}
       </FormContainer>
-    </Fragment>
+    </>
   )
 }
 
