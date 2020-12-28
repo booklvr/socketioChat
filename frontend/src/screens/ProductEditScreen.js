@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,6 +20,7 @@ const ProductEditScreen = ({ match, history }) => {
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
   const [uploading, setUploading] = useState(false)
+  // const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -36,7 +37,7 @@ const ProductEditScreen = ({ match, history }) => {
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET })
-      history.push('/admin/productlist')
+      history.push('/admin/productList')
     } else {
       if (!product.name || product._id !== productId) {
         dispatch(listProductDetails(productId))
@@ -50,7 +51,24 @@ const ProductEditScreen = ({ match, history }) => {
         setDescription(product.description)
       }
     }
-  }, [dispatch, history, productId, product, successUpdate])
+  }, [dispatch, history, product, productId, successUpdate])
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+
+    dispatch(
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        countInStock,
+        description,
+      })
+    )
+  }
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0]
@@ -73,22 +91,6 @@ const ProductEditScreen = ({ match, history }) => {
       console.error(error)
       setUploading(false)
     }
-  }
-
-  const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(
-      updateProduct({
-        _id: productId,
-        name,
-        price,
-        image,
-        brand,
-        category,
-        description,
-        countInStock,
-      })
-    )
   }
 
   return (
