@@ -7,16 +7,25 @@ import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 
-import { listProductDetails } from '../actions/productActions'
+import {
+  listProductDetails,
+  createProductReview,
+} from '../actions/productActions',
+
+import {PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
 
   const dispatch = useDispatch()
 
   const productDetails = useSelector((state) => state.productDetails)
-
   const { loading, error, product } = productDetails
+
+  const productCreateReview = useSelector((state) => state.productCreateReview)
+  const { loading: loadingProductReview, error: errorProductReview, success  } = productCreateReview
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id))

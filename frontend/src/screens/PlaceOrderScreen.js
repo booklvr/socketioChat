@@ -36,7 +36,6 @@ const PlaceOrderScreen = ({ history }) => {
   const { order, success, error } = orderCreate
 
   useEffect(() => {
-    console.log('place order screen order use effect:', order)
     if (success) {
       history.push(`/order/${order._id}`)
     }
