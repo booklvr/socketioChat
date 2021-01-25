@@ -42,7 +42,7 @@ export const getChatroom = asyncHandler(async (req, res) => {
   const chatroom = await Chatroom.findById(req.params.id)
 
   if (chatroom) {
-    res.status(200).json({ chatroom })
+    res.status(200).json(chatroom)
   } else {
     res.status(400)
     throw new Error('No Classrooms found')

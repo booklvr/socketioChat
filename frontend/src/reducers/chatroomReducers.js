@@ -33,7 +33,7 @@ export const chatroomListReducer = (state = { chatrooms: [] }, action) => {
 
   switch (type) {
     case CHATROOM_LIST_REQUEST:
-      return { laoding: true, ...state }
+      return { loading: true, ...state }
     case CHATROOM_LIST_SUCCESS:
       const { chatrooms } = payload
       return { loading: false, chatrooms }
@@ -49,7 +49,7 @@ export const chatroomDeleteReducer = (state = {}, action) => {
 
   switch (type) {
     case CHATROOM_DELETE_REQUEST:
-      return { laoding: true, ...state }
+      return { loading: true, ...state }
     case CHATROOM_DELETE_SUCCESS:
       return { loading: false, success: true }
     case CHATROOM_DELETE_FAIL:
@@ -64,7 +64,7 @@ export const chatroomDetailsReducer = (state = { chatroom: {} }, action) => {
 
   switch (type) {
     case CHATROOM_DETAILS_REQUEST:
-      return { laoding: true, ...state }
+      return { loading: true }
     case CHATROOM_DETAILS_SUCCESS:
       return { loading: false, chatroom: payload }
     case CHATROOM_DETAILS_FAIL:

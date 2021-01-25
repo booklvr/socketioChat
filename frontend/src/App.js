@@ -30,7 +30,7 @@ const App = () => {
             exact
           />
           <Route path='/' component={HomeScreen} exact />
-          <Route path='/:name' component={ChatroomScreen} />
+          <Route path='/chatrooms/:id' component={ChatroomScreen} />
         </Container>
       </main>
 

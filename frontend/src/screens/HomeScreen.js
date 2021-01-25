@@ -14,7 +14,6 @@ import ChatroomList from '../components/ChatroomList'
 
 const HomeScreen = ({ match }) => {
   const [name, setName] = useState('')
-  const [message, setMessage] = useState(null)
 
   const dispatch = useDispatch()
 
@@ -22,7 +21,14 @@ const HomeScreen = ({ match }) => {
   const { loading, chatroom, error } = chatroomRegister
 
   const chatroomList = useSelector((state) => state.chatroomList)
-  const { loadingChatroomList, errorChatroomList, chatrooms } = chatroomList
+  const { loadingList, errorList, chatrooms } = chatroomList
+
+  const chatroomDelete = useSelector((state) => state.chatroomDelete)
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = chatroomDelete
 
   const deleteHandler = (id) => {
     dispatch(deleteChatroom(id))
@@ -36,13 +42,12 @@ const HomeScreen = ({ match }) => {
 
   useEffect(() => {
     dispatch(listChatrooms())
-  }, [dispatch, chatroom])
+  }, [dispatch, chatroom, successDelete])
 
   return (
     <Fragment>
       <FormContainer>
         <h1>Add Chatroom</h1>
-        {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
@@ -61,8 +66,9 @@ const HomeScreen = ({ match }) => {
           </Button>
         </Form>
       </FormContainer>
-      {errorChatroomList && <Message variant='danger'>{error}</Message>}
-      {loadingChatroomList && <Loader />}
+      {errorList ||
+        (errorDelete && <Message variant='danger'>{error}</Message>)}
+      {loadingList || (loadingDelete && <Loader />)}
 
       <ChatroomList deleteHandler={deleteHandler} chatrooms={chatrooms} />
     </Fragment>

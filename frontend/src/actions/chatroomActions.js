@@ -70,8 +70,6 @@ export const listChatrooms = () => async (dispatch, getState) => {
 
     const { data } = await axios.get(`/api/chatrooms`, config)
 
-    console.log('data', data)
-
     dispatch({
       type: CHATROOM_LIST_SUCCESS,
       payload: data,
@@ -144,7 +142,7 @@ export const getChatroomDetails = (id) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`/api/chatroom/${id}`, config)
+    const { data } = await axios.get(`/api/chatrooms/${id}`, config)
 
     dispatch({
       type: CHATROOM_DETAILS_SUCCESS,

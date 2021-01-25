@@ -15,6 +15,8 @@ import {
 import {
   chatroomRegisterReducer,
   chatroomListReducer,
+  chatroomDetailsReducer,
+  chatroomDeleteReducer,
 } from './reducers/chatroomReducers'
 
 const reducer = combineReducers({
@@ -27,6 +29,8 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   chatroomRegister: chatroomRegisterReducer,
   chatroomList: chatroomListReducer,
+  chatroomDelete: chatroomDeleteReducer,
+  chatroomDetails: chatroomDetailsReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
